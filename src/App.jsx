@@ -14,11 +14,14 @@ function App() {
     <Header />
     <Nav />
     <CustomizationProvider>
-      <Canvas shadows gl={{ logarithmicDepthBuffer: true, antialias: false }} dpr={[1, 1.5]} camera={{ position: [6, 0, 5], fov: 25 }} style={{ backgroundColor: "#000000" }}>
-        {/* <hemisphereLight intensity={1} /> */}
+      <Canvas shadows
+        gl={{ logarithmicDepthBuffer: true, antialias: false }} dpr={[1, 1.5]}
+        camera={{ position: [6, 0, 5], fov: 25 }}
+        style={{ backgroundColor: "#000000" }}>
+        <color attach={"background"} args={["#ececec"]} />
+        {/* <fog attach="fog" args={['#ececec', 15, 21.5]} /> */}
         <Leva hidden />
         <Experience />
-        {/* <ContactShadows renderOrder={2} frames={1} resolution={1024} scale={120} blur={2} opacity={0.6} far={100} /> */}
         <Effects />
       </Canvas>
       <Configurator />

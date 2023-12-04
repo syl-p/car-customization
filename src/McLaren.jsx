@@ -8,7 +8,7 @@ Title: FREE - McLaren P1 MSO
 */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Decal, PivotControls, useGLTF, useTexture } from '@react-three/drei'
+import { Decal, PivotControls, TransformControls, useGLTF, useTexture } from '@react-three/drei'
 import { useCustomization } from './contexts/Customization'
 import * as THREE from "three"
 import { applyProps, useThree } from '@react-three/fiber'
@@ -18,8 +18,12 @@ import { Route } from 'wouter'
 export function McLaren(props) {
   const { mainColor, secondaryColor, mainColorsPalette, setTirePosition, setColorPosition, material, setSpoilerPosition, setTopPosition, setBoardPosition, rimsMaterial } = useCustomization()
   const { nodes, materials } = useGLTF('/models/free_mclaren_p1_mso.glb')
-  const [pos, setXYZ] = useState([0.776, 0.483, -0.800]);
-  const [rot, setRot] = useState([-0, 1.4795549159350097, -0]);
+
+  // Pos and rot for sticker
+  const [pos, setXYZ] = useState([0, 0, -0]);
+  const [rot, setRot] = useState([0, 1, 0]);
+  const sticker = useRef()
+
   const { debug, image, scale } = useControls({
     debug: false,
     image: { image: "/react.png" },
@@ -58,7 +62,7 @@ export function McLaren(props) {
     setColorPosition(colorPosition)
     setTirePosition(tirePosition)
     setSpoilerPosition(new THREE.Vector3(-0.8, 1, 0))
-    setTopPosition(new THREE.Vector3(1.5, 0.7, -3.2))
+    setTopPosition(new THREE.Vector3(0, 1, 0))
     setBoardPosition(boardPosition)
   }, [])
 
@@ -147,27 +151,7 @@ export function McLaren(props) {
       <mesh receiveShadow castShadow geometry={nodes.Object_53.geometry} material={bluePaintMaterial} material-color={mainColorsPalette[secondaryColor].color} />
 
       {/* Main color */}
-      <mesh receiveShadow castShadow geometry={nodes.Object_55.geometry} material={materials.WhitePaintjob} material-color={mainColorsPalette[mainColor].color} ref={color}>
-        <PivotControls
-          depthTest={false}
-          scale={0.55}
-          activeAxes={[true, true, true]}
-          onDrag={(local) => {
-            const position = new THREE.Vector3();
-            const scale = new THREE.Vector3();
-            const quaternion = new THREE.Quaternion();
-            local.decompose(position, quaternion, scale);
-            const rotation = new THREE.Euler().setFromQuaternion(quaternion);
-            setXYZ([position.x, position.y + 0.75, position.z + 0.3]);
-            setRot([rotation.x, rotation.y, rotation.z]);
-          }} />
-        <Decal
-          debug={debug}
-          position={pos}
-          rotation={rot}
-          scale={0.6 * scale}
-          map={useTexture(image)} />
-      </mesh>
+      <mesh receiveShadow castShadow geometry={nodes.Object_55.geometry} material={materials.WhitePaintjob} material-color={mainColorsPalette[mainColor].color} ref={color} />
 
       <mesh receiveShadow castShadow geometry={nodes.Object_56.geometry} material={material == 'carbon' ? materials.Carbon : materials.WhitePaintjob} />
 
